@@ -19,3 +19,6 @@ class App extends Component {
 }
 
 export default App;
+
+console.debug('This is Feed Explorer.');
+console.debug('You can play around with the `dapp` object.');
