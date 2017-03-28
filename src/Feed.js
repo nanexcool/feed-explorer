@@ -5,7 +5,8 @@ const Feed = (props) => {
     let web3 = initWeb3();
     return (
         <div>
-            {props.name}
+            <p>{props.name}</p>
+            <p>{web3.currentProvider.host}</p>
         </div>
     )
 }
