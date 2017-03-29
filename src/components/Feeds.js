@@ -1,7 +1,7 @@
 import React from 'react';
 // import web3 from './web3';
 
-const Feed = (props) => {
+const Feeds = (props) => {
   return (
     <div>
       <p>{props.name}</p>
@@ -10,4 +10,4 @@ const Feed = (props) => {
 
 }
 
-export default Feed;
+export default Feeds;

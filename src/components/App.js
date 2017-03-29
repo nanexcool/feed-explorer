@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import Feed from './Feed';
-import web3 from './web3';
-import dapp from './vendor/ds-feeds';
+import Feeds from './Feeds';
+import NoEthereum from './NoEthereum';
+import web3 from '../web3';
+import dapp from '../vendor/ds-feeds';
 
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import './App.css';
 
 class App extends Component {
 
   constructor() {
     super();
+
+    const params = window.location.hash.replace(/^#\/?|\/$/g, '').split('/');
+
     this.state = {
+      url: params.length > 0 ? params[0] : '',
       network: {
         syncing: null,
         startingBlock: null,
@@ -24,12 +30,15 @@ class App extends Component {
         defaultAccount: null
       },
       accounts: [],
-      defaultAccount: null
+      defaultAccount: null,
+      feeds: {}
     };
 
     this.checkNetwork = this.checkNetwork.bind(this);
     this.initNetwork = this.initNetwork.bind(this);
     this.checkAccounts = this.checkAccounts.bind(this);
+    this.setUrl = this.setUrl.bind(this);
+    this.parseUrl = this.parseUrl.bind(this);
   }
 
   componentDidMount() {
@@ -157,6 +166,35 @@ class App extends Component {
     });
   }
 
+  setUrl(hash) {
+    this.setState({ url: hash });
+  }
+
+  parseUrl() {
+    if(this.state.url !== '' && this.state.feeds[this.state.url]) {
+      return this.state.url;
+    }
+    else {
+      return null;
+    }
+  }
+
+  renderNoWeb3() {
+    return (
+      <NoEthereum />
+    );
+  }
+
+  renderContent() {
+    return (
+      (this.parseUrl() !== null)
+            ? <Feed feed={this.state.feeds[this.parseUrl()]}
+                    setUrl={this.setUrl}/>
+            : <Feeds feeds={this.state.feeds}
+                      setUrl={this.setUrl}/>
+    )
+  }
+
   render() {
     const accounts = this.state.network.accounts;//.map((account) => <li key={account}>{account}</li>);
     return (
@@ -165,10 +203,11 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Feed name={'My Feed'} />
+        <div className="App-intro">
+          {
+            this.state.network.isConnected ? this.renderContent() : this.renderNoWeb3()
+          }
+        </div>
         {accounts}
       </div>
     );
