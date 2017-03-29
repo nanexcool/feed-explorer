@@ -11,7 +11,9 @@ if (typeof web3 === 'undefined' && typeof Web3 === 'undefined') {
 
 dapp['ds-feeds'] = (function builder () {
   var environments = {
-  "internal": {}
+  "internal": {},
+  "kovan": {},
+  "live": {}
 };
 
   function ContractWrapper (headers, _web3) {
